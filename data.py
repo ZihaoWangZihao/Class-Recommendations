@@ -1,3 +1,5 @@
+from faker import Faker
+import random
 class Course(object):
     """
     Represents a Course
@@ -54,4 +56,14 @@ class Person(object):
     def get_courses(self):
         return self.courses
 
-
+# Generating fake data
+fake = Faker()
+names = []
+years = []
+majors = []
+for i in range(100):
+    names.append(fake.name())
+    year_random = random.choice(["Freshman", "Sophomore", "Junior", "Senior"])
+    years.append(year_random)
+    major_random = random.choice([1,2,3,4,5,6,7,8,9,10,11,12,14,15,16,17,18,20])
+    majors.append(major_random)
