@@ -8,7 +8,7 @@ class Course(object):
     hours     <int>
     units   <int>
     """
-    def __init__(self, course_num, semester_offered, rating, hours, units):
+    def __init__(self, course_num, semester_offered, units, rating, hours):
         self.course_num = course_num
         self.semester_offered = semester_offered
         self.rating = rating
