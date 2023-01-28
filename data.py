@@ -2,10 +2,20 @@
 from faker import Faker
 import random
 import pandas as pd
+from urllib.request import urlopen
+import re
+from bs4 import BeautifulSoup
 
 # Getting files
 careers_excel = "List of Careers.xlsx"
 courses_excel = "List of Classes.xlsx"
+url = "http://student.mit.edu/catalog/m6a.html"
+page = urlopen(url)
+html_bytes = page.read()
+html = html_bytes.decode("utf-8")
+soup = BeautifulSoup(html, "html.parser")
+a_tag = soup.findAll("a") # Finds me all the <a> </a> tags, which is the tag the course numbers are contained in
+print(a_tag)
 
 # Manipulating Data
 career_list = pd.read_excel(careers_excel)
@@ -77,7 +87,6 @@ possible_careers = []
 for i in career_list["OCC_TITLE"]:
     possible_careers.append(i)
 course = []
-print(class_list) # Why does this not show all of the data in the Excel?????
 
 for i in range(100):
     names.append(fake.name())
