@@ -9,6 +9,7 @@ courses_excel = "List of Classes.xlsx"
 
 # Manipulating Data
 career_list = pd.read_excel(careers_excel)
+class_list = pd.read_excel(courses_excel)
 
 class Course(object):
     """
@@ -75,6 +76,8 @@ careers = [] # List of fake careers
 possible_careers = []
 for i in career_list["OCC_TITLE"]:
     possible_careers.append(i)
+course = []
+print(class_list) # Why does this not show all of the data in the Excel?????
 
 for i in range(100):
     names.append(fake.name())
