@@ -3,24 +3,49 @@ from faker import Faker
 import random
 import pandas as pd
 from urllib.request import urlopen
-import re
 from bs4 import BeautifulSoup
 
 # Getting files
 careers_excel = "List of Careers.xlsx"
 courses_excel = "List of Classes.xlsx"
+career_list = pd.read_excel(careers_excel)
+class_list = pd.read_excel(courses_excel)
+
+# Getting careers
+possible_careers = []
+for i in career_list["OCC_TITLE"]:
+    possible_careers.append(i)
+
+# Web Scraping - Getting courses
 url = "http://student.mit.edu/catalog/m6a.html"
 page = urlopen(url)
 html_bytes = page.read()
 html = html_bytes.decode("utf-8")
 soup = BeautifulSoup(html, "html.parser")
-a_tag = soup.findAll("a") # Finds me all the <a> </a> tags, which is the tag the course numbers are contained in
-print(a_tag)
+a_tag = soup.find_all("a") # Finds me all the <a> </a> tags, which is the tag the course numbers are contained in
+course = []
+for i in a_tag:
+    text = i.text
+    if "6." in text and "/" not in text:
+        course.append(text)
+course = list(dict.fromkeys(course)) # remove duplicates
+print(course) # 6.100B not in course
 
-# Manipulating Data
-career_list = pd.read_excel(careers_excel)
-class_list = pd.read_excel(courses_excel)
+# Generating fake data
+fake = Faker()
+names = [] # List of fake names
+years = [] # List of fake years
+majors = [] # List of fake majors
+careers = [] # List of fake careers
 
+for i in range(100):
+    names.append(fake.name())
+    year_random = random.choice(["Freshman", "Sophomore", "Junior", "Senior"])
+    years.append(year_random)
+    major_random = random.choice([1,2,3,4,5,6,7,8,9,10,11,12,14,15,16,17,18,20])
+    majors.append(major_random)
+    careers_random = random.choice(possible_careers)
+    careers.append(careers_random)
 class Course(object):
     """
     Represents a Course
@@ -76,23 +101,3 @@ class Person(object):
         return self.career
     def get_courses(self):
         return self.courses
-
-# Generating fake data
-fake = Faker()
-names = [] # List of fake names
-years = [] # List of fake years
-majors = [] # List of fake majors
-careers = [] # List of fake careers
-possible_careers = []
-for i in career_list["OCC_TITLE"]:
-    possible_careers.append(i)
-course = []
-
-for i in range(100):
-    names.append(fake.name())
-    year_random = random.choice(["Freshman", "Sophomore", "Junior", "Senior"])
-    years.append(year_random)
-    major_random = random.choice([1,2,3,4,5,6,7,8,9,10,11,12,14,15,16,17,18,20])
-    majors.append(major_random)
-    careers_random = random.choice(possible_careers)
-    careers.append(careers_random)
