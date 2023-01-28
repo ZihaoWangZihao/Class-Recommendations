@@ -1,10 +1,14 @@
 # Importing libraries
 from faker import Faker
 import random
+import pandas as pd
 
 # Getting files
 careers_excel = "List of Careers.xlsx"
 courses_excel = "List of Classes.xlsx"
+
+# Manipulating Data
+career_list = pd.read_excel(careers_excel)
 
 class Course(object):
     """
@@ -64,12 +68,19 @@ class Person(object):
 
 # Generating fake data
 fake = Faker()
-names = []
-years = []
-majors = [] # Recorded majors are [1,2,3,4,5,6,7,8,9,10,11,12,14,15,16,17,18,20]
+names = [] # List of fake names
+years = [] # List of fake years
+majors = [] # List of fake majors
+careers = [] # List of fake careers
+possible_careers = []
+for i in career_list["OCC_TITLE"]:
+    possible_careers.append(i)
+
 for i in range(100):
     names.append(fake.name())
     year_random = random.choice(["Freshman", "Sophomore", "Junior", "Senior"])
     years.append(year_random)
     major_random = random.choice([1,2,3,4,5,6,7,8,9,10,11,12,14,15,16,17,18,20])
     majors.append(major_random)
+    careers_random = random.choice(possible_careers)
+    careers.append(careers_random)
