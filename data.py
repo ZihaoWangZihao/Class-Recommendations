@@ -4,6 +4,7 @@ import random
 import pandas as pd
 from urllib.request import urlopen
 from bs4 import BeautifulSoup
+import numpy as np
 
 # Getting files
 careers_excel = "List of Careers.xlsx"
@@ -34,18 +35,25 @@ print(course) # 6.100B not in course
 # Generating fake data
 fake = Faker()
 names = [] # List of fake names
-years = [] # List of fake years
 majors = [] # List of fake majors
 careers = [] # List of fake careers
+classes = [] # List of fake courses
+semester = [] # List of fake semesters
 
-for i in range(100):
+dp = 0 # How many datapoints to generate
+for i in range(dp):
     names.append(fake.name())
-    year_random = random.choice(["Freshman", "Sophomore", "Junior", "Senior"])
-    years.append(year_random)
     major_random = random.choice([1,2,3,4,5,6,7,8,9,10,11,12,14,15,16,17,18,20])
     majors.append(major_random)
     careers_random = random.choice(possible_careers)
     careers.append(careers_random)
+    semester_random = random.choice(["Fall", "Spring"])
+    semester.append(semester_random)
+
+# Each person assumed to take 40 classes
+for i in range(dp*40):
+    course_random = random.choice(course)
+    classes.append(course_random)
 class Course(object):
     """
     Represents a Course
@@ -56,12 +64,11 @@ class Course(object):
     hours     <int>
     units   <int>
     """
-    def __init__(self, course_num, semester_offered, units, rating, hours):
+    def __init__(self, course_num, semester_offered, rating, hours):
         self.course_num = course_num
         self.semester_offered = semester_offered
         self.rating = rating
         self.hours = hours
-        self.units = units
     """ Field Accessors """
     def get_course_num(self):
         return self.course_num
@@ -71,8 +78,6 @@ class Course(object):
         return self.rating
     def get_hours(self):
         return self.hours
-    def get_units(self):
-        return self.units
 
 class Person(object):
     """
@@ -84,20 +89,20 @@ class Person(object):
     career     <major>
     courses   <list with each element of type Course>
     """
-    def __init__(self, name, year, major, career, courses):
+    def __init__(self, name, major, career, courses):
         self.name = name
-        self.year = year
         self.major = major
         self.career = career
         self.courses = courses
     """ Field Accessors """
     def get_name(self):
         return self.name
-    def get_year(self):
-        return self.year
+
     def get_major(self):
         return self.major
     def get_career(self):
         return self.career
     def get_courses(self):
         return self.courses
+
+
